@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+
+
+    <link href="http://cdn-na.infragistics.com/igniteui/latest/css/themes/infragistics/infragistics.theme.css" rel="stylesheet"></link>
+    <link href="http://cdn-na.infragistics.com/igniteui/latest/css/structure/infragistics.css" rel="stylesheet"></link>
+    <style>
+        .row-edit-dialog-container-cols
+        {
+            width:100%;
+            overflow:hidden;
+            border-bottom:1px solid #ccc;
+            padding-bottom:15px;
+        }
+        .row-edit-dialog-container-cols table
+        {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .row-edit-dialog-container-cols table tbody td
+        {
+            border:none !important;
+            padding: 0 4px 10px;
+        }
+        .row-edit-dialog-container-head
+        {
+            border-bottom:1px solid #ccc;padding-bottom:10px;margin-top:10px;margin-bottom:25px;font-size:16px;
+        }
+        .ui-dialog .ui-dialog-buttonpane
+        {
+            margin-top:0;
+            padding-top:0;
+        }
+        .ui-dialog .ui-dialog-buttonpane button
+        {
+            margin:0.5em 0 0.5em 0.4em;
+        }
+        .ui-iggrid .ui-widget-content.ui-dialog
+        {
+            border-color:#888;
+        }
+        .ui-dialog-title
+        {
+            text-transform:uppercase;
+            margin:0;
+            font-size:90%;
+        }
+        .ui-dialog .ui-dialog-titlebar
+        {
+            padding: 0.7em 1em;
+        }
+    </style>
+    <script src="http://igniteui.com/js/modernizr.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+    <script src="http://cdn-na.infragistics.com/igniteui/latest/js/infragistics.core.js"></script>
+    <script src="http://cdn-na.infragistics.com/igniteui/latest/js/infragistics.dv.js"></script>
+    <script src="http://cdn-na.infragistics.com/igniteui/latest/js/infragistics.lob.js"></script>
+    <style>
+        #grid_container
+        {
+            width: 100%;
+
+        }
+    </style>
+
+</head>
+<body>
+<div style="width: 1170px; margin: 0 auto; padding-top: 150px">
+    <table id="grid"></table>
+</div>
+
+<script src="http://igniteui.com/js-data/nw-customers-with-orders"></script>
+<script>
+    $(function () {
+
+        $("#grid").igHierarchicalGrid({
+            dataSource: nwCustomersWithOrders,
+            autoGenerateColumns: false,
+            height: "400px",
+            rowsRendered: function (evt, ui) {
+                //get data collection
+                var dataSource = ui.owner.dataSource;
+                $(".order-sparkline").each(function(i) {
+                    $(this).igSparkline({
+                        dataSource: dataSource.findRecordByKey($(this).data("id")).Orders,
+                        height: "24px",
+
+                        markerVisibility: "visible",
+                        tooltipTemplate: "<div style='background-color:white; z-index: 20'>Some text<br />Some text</div>",
+                        tooltipShown: function (evt, ui) {
+                            var temp = 5;
+                        },
+                        valueMemberPath: 'TotalPrice'
+                    })
+                            .css("background-color", "transparent");
+                });
+            },
+            primaryKey: "ID",
+            columns: [
+                { key: "ID", hidden: true },
+                { key: "CompanyName", headerText: "Company" },
+                { key: "ContactName", headerText: "Contact" },
+                { key: "ContactTitle", headerText: "Contact Title" },
+                { key: "Orders", headerText: "Order History", template: "<div data-id='${ID}' class='order-sparkline'></div>" }
+            ]
+        });
+
+    });
+
+</script>
+<style>
+
+</style>
+</body>
+</html>
