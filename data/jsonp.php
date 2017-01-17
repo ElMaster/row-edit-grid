@@ -1,4 +1,4 @@
-?(/* AAPL historical OHLC data from the Google Finance API */
+jQuery19105539910518947229_1484666342674(/* AAPL historical OHLC data from the Google Finance API */
 [
 /* Jan 2010 */
 [1263859200000,30.72],
