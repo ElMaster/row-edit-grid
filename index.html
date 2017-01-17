@@ -273,7 +273,7 @@
     <!-- endbuild -->
   <script>
     $(document).ready(function () {
-      $.getJSON('data/jsonp.php?filename=aapl-c.json&callback=?', function(data) {
+      $.getJSON('data/jsonp.json', function(data) {
         // Create the chart
         window.chart = new Highcharts.StockChart({
           chart: {
