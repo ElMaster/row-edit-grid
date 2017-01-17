@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+
+
+
+
+    <link href="css/infragistics.theme.css" rel="stylesheet">
+    <link href="css/infragistics.css" rel="stylesheet">
+    <style>
+        .row-edit-dialog-container-cols
+        {
+            width:100%;
+            overflow:hidden;
+            border-bottom:1px solid #ccc;
+            padding-bottom:15px;
+        }
+        .row-edit-dialog-container-cols table
+        {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .row-edit-dialog-container-cols table tbody td
+        {
+            border:none !important;
+            padding: 0 4px 10px;
+        }
+        .row-edit-dialog-container-head
+        {
+            border-bottom:1px solid #ccc;padding-bottom:10px;margin-top:10px;margin-bottom:25px;font-size:16px;
+        }
+        .ui-dialog .ui-dialog-buttonpane
+        {
+            margin-top:0;
+            padding-top:0;
+        }
+        .ui-dialog .ui-dialog-buttonpane button
+        {
+            margin:0.5em 0 0.5em 0.4em;
+        }
+        .ui-iggrid .ui-widget-content.ui-dialog
+        {
+            border-color:#888;
+        }
+        .ui-dialog-title
+        {
+            text-transform:uppercase;
+            margin:0;
+            font-size:90%;
+        }
+        .ui-dialog .ui-dialog-titlebar
+        {
+            padding: 0.7em 1em;
+        }
+    </style>
+    <style>
+        .skillbar {
+            position:relative;
+            display:block;
+
+            width:80%;
+            background:#eee;
+            height:25px;
+            border-radius:3px;
+            -moz-border-radius:3px;
+            -webkit-border-radius:3px;
+            -webkit-transition:0.4s linear;
+            -moz-transition:0.4s linear;
+            -ms-transition:0.4s linear;
+            -o-transition:0.4s linear;
+            transition:0.4s linear;
+            -webkit-transition-property:width, background-color;
+            -moz-transition-property:width, background-color;
+            -ms-transition-property:width, background-color;
+            -o-transition-property:width, background-color;
+            transition-property:width, background-color;
+        }
+
+        .skillbar-title {
+            position:absolute;
+            top:0;
+            left:0;
+            width:110px;
+            font-weight:bold;
+            font-size:13px;
+            color:#ffffff;
+            background:#6adcfa;
+            -webkit-border-top-left-radius:3px;
+            -webkit-border-bottom-left-radius:4px;
+            -moz-border-radius-topleft:3px;
+            -moz-border-radius-bottomleft:3px;
+            border-top-left-radius:3px;
+            border-bottom-left-radius:3px;
+        }
+
+        .skillbar-title span {
+            display:block;
+            background:rgba(0, 0, 0, 0.1);
+            padding:0 20px;
+            height:25px;
+            line-height:25px;
+            -webkit-border-top-left-radius:3px;
+            -webkit-border-bottom-left-radius:3px;
+            -moz-border-radius-topleft:3px;
+            -moz-border-radius-bottomleft:3px;
+            border-top-left-radius:3px;
+            border-bottom-left-radius:3px;
+        }
+
+        .skillbar-bar {
+            height:25px;
+            width:0px;
+            background:#6adcfa;
+            border-radius:3px;
+            -moz-border-radius:3px;
+            -webkit-border-radius:3px;
+        }
+
+        .skill-bar-percent {
+            position:absolute;
+            right:10px;
+            top:0;
+            font-size:11px;
+            height:25px;
+            line-height:25px;
+            color:#ffffff;
+            color:rgba(0, 0, 0, 0.4);
+        }
+    </style>
+    <script src="js/modernizr.min.js"></script>
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/infragistics.core.js"></script>
+    <script src="js/infragistics.dv.js"></script>
+    <script src="js/infragistics.lob.js"></script>
+    <script src="jquery.sparkline.min.js"></script>
+    <style>
+        #grid_container
+        {
+            width: 100%;
+
+        }
+    </style>
+
+</head>
+<body>
+<div style="width: 1170px; margin: 0 auto; padding-top: 150px">
+    <table id="grid"></table>
+
+    <script id="dialogTemplate" type="text/html">
+        <div class="row-edit-dialog-container-head"><strong>${name}</strong></div>
+        <div class="row-edit-dialog-container-cols">
+            <div style="float: left;">
+                <table>
+                    <colgroup>
+                        <col style="width: 30%;" />
+                        <col style="width: 70%;" />
+                    </colgroup>
+                    <tbody data-render-tmpl="true"></tbody>
+                </table>
+            </div>
+
+        </div>
+    </script>
+
+    <script id="editorsTemplate" type="text/html">
+        <tr>
+            <td style="text-align:right;color:#777;"><strong>${headerText}</strong></td>
+            <td><input data-editor-for-${key}="true" /></td>
+        </tr>
+    </script>
+</div>
+
+<script src="http://www.igniteui.com/data-files/nw-employees.js"></script>
+<script>
+    $(function () {
+        var mydata = [
+            { id: "1",	 invdate: "2015-09-01", name: "test2",	note: "note2",	amount: "300.00", tax: "20.00", closed: false, ship_via: "10%", total: "[2, 4, 3, 4, 5, 4, 5, 4, 3, 4]" },
+            { id: "2",	 invdate: "2015-09-01", name: "test3",	note: "note3",	amount: "400.00", tax: "30.00", closed: false, ship_via: "50%", total: "[2, 4, 3, 4, 5, 4, 5, 4, 3, 4]" },
+            { id: "3",	 invdate: "2015-10-04", name: "test4",	note: "note4",	amount: "200.00", tax: "10.00", closed: true,  ship_via: "30%", total: "[10,8,5,7,4,4,1,8,5,7,4,4,1]" },
+            { id: "4",	 invdate: "2015-10-31", name: "test5",	note: "note5",	amount: "300.00", tax: "20.00", closed: false, ship_via: "60%", total: "[10,8,5,7,4,4,1,8,5,7,4,4,1]" },
+            { id: "5",	 invdate: "2015-09-06", name: "test6",	note: "note6",	amount: "400.00", tax: "30.00", closed: false, ship_via: "50%", total: "[10,8,5,7,4,4,1,8,5,7,4,4,1]" },
+            { id: "6",	 invdate: "2015-10-04", name: "test7",	note: "note7",	amount: "200.00", tax: "10.00", closed: true,  ship_via: "70%", total: "[10,8,5,7,4,4,1,4,4,1,10,8,5,7]" },
+            { id: "7",	 invdate: "2015-10-03", name: "test8",	note: "note8",	amount: "300.00", tax: "20.00", closed: false, ship_via: "90%", total: "[10,8,5,7,4,4,1,2, 4, 3, 4, 5]" },
+            { id: "8",	 invdate: "2015-09-01", name: "test9",	note: "note9",	amount: "400.00", tax: "30.00", closed: false, ship_via: "50%", total: "[10,8,5,7,4,4,1,4,4,1,10,8,5,7]" },
+            { id: "9", invdate: "2015-09-08", name: "test10", note: "note10", amount: "500.00", tax: "30.00", closed: true,  ship_via: "20%", total: "[10,8,5,7,4,4,1,2, 4, 3, 4, 5]" },
+            { id: "10", invdate: "2015-09-08", name: "test11", note: "note11", amount: "500.00", tax: "30.00", closed: false, ship_via: "50%", total: "[10,8,5,7,4,4,1,8,5,7,4,4,1]" },
+            { id: "11", invdate: "2015-09-10", name: "test12", note: "note12", amount: "500.00", tax: "30.00", closed: false, ship_via: "80%", total: "[10,8,5,7,4,4,1,2, 4, 3, 4, 5]" },
+            { id: "12",	 invdate: "2015-09-01", name: "test2",	note: "note2",	amount: "300.00", tax: "20.00", closed: false, ship_via: "100%", total: "[2, 4, 3, 4, 5, 4, 5, 4, 3, 4]" },
+            { id: "13",	 invdate: "2015-10-04", name: "test4",	note: "note4",	amount: "200.00", tax: "10.00", closed: true,  ship_via: "15%", total: "[10,8,5,7,4,4,1,2, 4, 3, 4, 5]" },
+            { id: "14",	 invdate: "2015-10-31", name: "test5",	note: "note5",	amount: "300.00", tax: "20.00", closed: false, ship_via: "20%", total: "[10,8,5,7,4,4,1,10,8,5,7,4,4,1]" },
+            { id: "15",	 invdate: "2015-09-06", name: "test6",	note: "note6",	amount: "400.00", tax: "30.00", closed: false, ship_via: "10%", total: "[10,8,5,7,4,4,1,4,4,1,10,8,5,7]" },
+            { id: "16",	 invdate: "2015-10-04", name: "test7",	note: "note7",	amount: "200.00", tax: "10.00", closed: true,  ship_via: "5%", total: "[10,8,5,7,4,4,1,2, 4, 3, 4, 5]" },
+            { id: "17",	 invdate: "2015-10-03", name: "test8",	note: "note8",	amount: "300.00", tax: "20.00", closed: false, ship_via: "90%", total: "[10,8,5,7,4,4,1,4,4,1,10,8,5,7]" },
+            { id: "18",	 invdate: "2015-09-01", name: "test9",	note: "note9",	amount: "400.00", tax: "30.00", closed: false, ship_via: "75%", total: "[10,8,5,7,4,4,1]" },
+            { id: "19", invdate: "2015-09-08", name: "test10", note: "note10", amount: "500.00", tax: "30.00", closed: true,  ship_via: "25%", total: "[10,8,5,7,4,4,1,2, 4, 3, 4, 5]" },
+            { id: "20", invdate: "2015-09-08", name: "test11", note: "note11", amount: "500.00", tax: "30.00", closed: false, ship_via: "18%", total: "[10,8,5,7,4,4,1,4,4,1,10,8,5,7]" },
+            { id: "21", invdate: "2015-09-10", name: "test12", note: "note12", amount: "500.00", tax: "30.00", closed: false, ship_via: "89%", total: "[10,8,5,7,4,4,1]" }
+        ];
+        function progressFn() {
+            $('.skillbar').each(function(){
+                $(this).find('.skillbar-bar').animate({
+                    width:$(this).attr('data-percent')
+                },800);
+            });
+        }
+        $("#grid").igGrid({
+            dataSource: mydata,
+            primaryKey: "id",
+            width: "100%",
+            height: "600px",
+            autoCommit: true,
+            autofitLastColumn: false,
+            autoGenerateColumns: false,
+            columns: [
+                { key: "id",     headerText: "ID",  dataType: "number"},
+                { key: "name",   headerText: "Name",  dataType: "string" },
+                { key: "note",   headerText: "Note",  dataType: "string" },
+                { key: "amount", headerText: "Amount",  dataType: "number" },
+                { key: "total",  headerText: "Total",  template: "<div data-id='${id}' class='order-total'>${total}</div>" },
+                { key: "ship_via",  headerText: "Progress",  template: "<div class='skillbar clearfix' data-percent='${ship_via}'><div class='skillbar-bar' style='background: #2ecc71;'></div><div class='skill-bar-percent'>${ship_via}</div></div>" }
+            ],
+
+            features: [
+                {
+                    name: "Sorting",
+                    type: "local",
+
+                    persist: true
+                },
+                {
+                    name: "Filtering",
+                    type: "local",
+                    persist: true
+                },
+
+                {
+                    name: "Selection",
+                    mode: 'row',
+                    multipleSelection: true,
+                    persist: true
+                },
+
+                {
+                    name: "Paging",
+                    type: "local",
+                    pageSize: 10
+                },
+
+                {
+                    name: "Updating",
+
+                    editMode: "dialog",
+                    addRowLabel: "ADD NEW COLUMNS",
+                    columnSettings: [
+                        {
+                            columnKey: "id",
+                            readOnly: true
+                        }
+                    ],
+                    rowEditDialogOptions: {
+                        width: "530px",
+                        height: "530px",
+                        dialogTemplateSelector: "#dialogTemplate",
+                        editorsTemplateSelector: "#editorsTemplate",
+                        showReadonlyEditors: false,
+                    },
+                    editRowEnded: function (evt, ui) {
+//                        var dataSource = ui.owner.dataSource;
+                        progressFn()
+                        $(".order-total").each(function(i) {
+                            var ar;
+                            try {
+                                console.log($(this))
+                                ar = $.parseJSON($(this).text());
+                                if (ar && ar.length>0) {
+                                    $(this).sparkline(ar, {
+                                        type: 'bar',
+                                        colorMap: {
+                                            '7': '#a1a1a1'
+                                        },
+                                        barColor: '#26B99A'
+                                    });
+                                }
+                            } catch(e) {}
+                        });
+                    }
+
+                }
+            ],
+            rowsRendered: function (evt, ui) {
+                //get data collection
+//                var dataSource = ui.owner.dataSource;
+                progressFn();
+
+
+                $(".order-total").each(function(i) {
+                    var ar;
+                    try {
+
+                        ar = $.parseJSON($(this).text());
+                        if (ar && ar.length>0) {
+
+                            $(this).sparkline(ar, {
+                                type: 'bar',
+                                colorMap: {
+                                    '7': '#a1a1a1'
+                                },
+                                barColor: '#26B99A'
+                            });
+                        }
+                    } catch(e) {}
+                });
+            },
+
+        });
+    });
+
+
+
+</script>
+<style>
+
+</style>
+</body>
+</html>

@@ -1,328 +1,321 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
+<!doctype html>
+<html class="no-js" ng-app="GridApp">
+  <head>
+    <meta charset="utf-8">
+    <title>Grid</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.css">
+
+    <link rel="stylesheet" href="styles/roboto.css">
+    <link rel="stylesheet" href="styles/font-awesome.css">
+    <link rel="stylesheet" href="styles/panel.css">
+    <link rel="stylesheet" href="styles/feather.css">
+    <link rel="stylesheet" href="styles/animate.css">
+    <link rel="stylesheet" href="styles/style.min.css">
+    <link rel="stylesheet" href="styles/style.skins.min.css">
+    <!-- endbuild -->
+    <link href="vendor/grid/css/themes/bootstrap/infragistics.theme.css" rel="stylesheet" />
+    <link href="vendor/grid/css/structure/infragistics.css" rel="stylesheet" />
 
 
 
-
-
-    <link href="css/infragistics.theme.css" rel="stylesheet">
-    <link href="css/infragistics.css" rel="stylesheet">
+    <link href="vendor/highcharts/css/highcharts.css" rel="stylesheet" />
     <style>
-        .row-edit-dialog-container-cols
-        {
-            width:100%;
-            overflow:hidden;
-            border-bottom:1px solid #ccc;
-            padding-bottom:15px;
-        }
-        .row-edit-dialog-container-cols table
-        {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .row-edit-dialog-container-cols table tbody td
-        {
-            border:none !important;
-            padding: 0 4px 10px;
-        }
-        .row-edit-dialog-container-head
-        {
-            border-bottom:1px solid #ccc;padding-bottom:10px;margin-top:10px;margin-bottom:25px;font-size:16px;
-        }
-        .ui-dialog .ui-dialog-buttonpane
-        {
-            margin-top:0;
-            padding-top:0;
-        }
-        .ui-dialog .ui-dialog-buttonpane button
-        {
-            margin:0.5em 0 0.5em 0.4em;
-        }
-        .ui-iggrid .ui-widget-content.ui-dialog
-        {
-            border-color:#888;
-        }
-        .ui-dialog-title
-        {
-            text-transform:uppercase;
-            margin:0;
-            font-size:90%;
-        }
-        .ui-dialog .ui-dialog-titlebar
-        {
-            padding: 0.7em 1em;
-        }
+      .ui-iggrid .ui-widget-header, .ui-iggrid th, .ui-iggrid th.ui-state-default {
+        padding: 16px 8px;
+      }
+      .ui-iggrid th, .ui-iggrid th.ui-widget-header.ui-state-default {
+        border-top: none;
+        border-bottom: 1px solid #ddd;
+      }
+      .ui-iggrid table tbody td, .ui-iggrid .ui-iggrid-header, .ui-iggrid table th {
+        padding: 5px 8px;
+      }
+      .ui-iggrid table tbody td {
+        font-size: 12px;
+      }
+      .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+        border-radius: 0;
+      }
+      .shadows {
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 2px 1px -1px rgba(0,0,0,0.12);
+      }
+      .ui-igtrialwatermark {
+        display: none!important;
+      }
+      .ui-iggrid tr.ui-ig-altrecord {
+        background-color: #ffffff;
+      }
+      .ui-widget-content tr td:nth-child(1){
+
+        text-align: center;
+      }
+      .ui-widget-content tr td:nth-child(1) img {
+        border: 1px solid #dddddd
+      }
     </style>
-    <style>
-        .skillbar {
-            position:relative;
-            display:block;
+  </head>
+  <body ng-controller="AppCtrl">
 
-            width:80%;
-            background:#eee;
-            height:25px;
-            border-radius:3px;
-            -moz-border-radius:3px;
-            -webkit-border-radius:3px;
-            -webkit-transition:0.4s linear;
-            -moz-transition:0.4s linear;
-            -ms-transition:0.4s linear;
-            -o-transition:0.4s linear;
-            transition:0.4s linear;
-            -webkit-transition-property:width, background-color;
-            -moz-transition-property:width, background-color;
-            -ms-transition-property:width, background-color;
-            -o-transition-property:width, background-color;
-            transition-property:width, background-color;
-        }
+    <div class="app layout-fixed-header">
 
-        .skillbar-title {
-            position:absolute;
-            top:0;
-            left:0;
-            width:110px;
-            font-weight:bold;
-            font-size:13px;
-            color:#ffffff;
-            background:#6adcfa;
-            -webkit-border-top-left-radius:3px;
-            -webkit-border-bottom-left-radius:4px;
-            -moz-border-radius-topleft:3px;
-            -moz-border-radius-bottomleft:3px;
-            border-top-left-radius:3px;
-            border-bottom-left-radius:3px;
-        }
 
-        .skillbar-title span {
-            display:block;
-            background:rgba(0, 0, 0, 0.1);
-            padding:0 20px;
-            height:25px;
-            line-height:25px;
-            -webkit-border-top-left-radius:3px;
-            -webkit-border-bottom-left-radius:3px;
-            -moz-border-radius-topleft:3px;
-            -moz-border-radius-bottomleft:3px;
-            border-top-left-radius:3px;
-            border-bottom-left-radius:3px;
-        }
+      <!-- content panel -->
+      <div class="main-panel">
 
-        .skillbar-bar {
-            height:25px;
-            width:0px;
-            background:#6adcfa;
-            border-radius:3px;
-            -moz-border-radius:3px;
-            -webkit-border-radius:3px;
-        }
+        <!-- top header -->
+        <div class="header navbar" ng-include="'views/common/header.html'"></div>
+        <!-- /top header -->
 
-        .skill-bar-percent {
-            position:absolute;
-            right:10px;
-            top:0;
-            font-size:11px;
-            height:25px;
-            line-height:25px;
-            color:#ffffff;
-            color:rgba(0, 0, 0, 0.4);
-        }
-    </style>
-    <script src="js/modernizr.min.js"></script>
-    <script src="js/jquery-1.9.1.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/infragistics.core.js"></script>
-    <script src="js/infragistics.dv.js"></script>
-    <script src="js/infragistics.lob.js"></script>
-    <script src="jquery.sparkline.min.js"></script>
-    <style>
-        #grid_container
-        {
-            width: 100%;
 
-        }
-    </style>
+        <!-- main area -->
+        <div class="main-content">
+          <!--<div class="main-content-header">-->
+              <!--<div class="row">-->
+                <!--<div class="col-xs-12">-->
+                  <!--<h2 class="no-margin">Inventory</h2>-->
+                <!--</div>-->
+              <!--</div>-->
+          <!--</div>-->
+          <div ng-controller="indexCtrl">
 
-</head>
-<body>
-<div style="width: 1170px; margin: 0 auto; padding-top: 150px">
-    <table id="grid"></table>
+            <div class="row">
+              <div class="col-md-7">
 
-    <script id="dialogTemplate" type="text/html">
-        <div class="row-edit-dialog-container-head"><strong>${name}</strong></div>
-        <div class="row-edit-dialog-container-cols">
-            <div style="float: left;">
-                <table>
-                    <colgroup>
-                        <col style="width: 30%;" />
-                        <col style="width: 70%;" />
-                    </colgroup>
-                    <tbody data-render-tmpl="true"></tbody>
-                </table>
+                <div class="panel">
+                  <div class="panel-heading border">
+                    <h4 class="no-margin">Line chart</h4>
+                  </div>
+                  <div class="panel-body">
+                    <div id="container" style="height: 400px; min-width: 600px"></div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-md-5">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="widget bg-blue">
+                      <div class="widget-bg-icon">
+                        <i class="fa fa-paint-brush"></i>
+                      </div>
+                      <div class="widget-details">
+                        <span class="block h4 mt0 mb5">32,893K</span>
+                        <span>Shops worldwide</span>
+                      </div>
+                    </div>
+                    <div class="widget bg-blue">
+                      <div class="widget-bg-icon">
+                        <i class="fa fa-paint-brush"></i>
+                      </div>
+                      <div class="widget-details">
+                        <span class="block h4 mt0 mb5">32,893K</span>
+                        <span>Shops worldwide</span>
+                      </div>
+                    </div>
+                    <div class="widget bg-primary">
+                      <div class="widget-bg-icon">
+                        <i class="fa fa-bookmark-o"></i>
+                      </div>
+                      <div class="widget-details">
+                        <span class="block h4 mt0 mb5">4,894K</span>
+                        <span>Parks and recreation</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="widget bg-primary">
+                      <div class="widget-bg-icon">
+                        <i class="fa fa-bookmark-o"></i>
+                      </div>
+                      <div class="widget-details">
+                        <span class="block h4 mt0 mb5">4,894K</span>
+                        <span>Parks and recreation</span>
+                      </div>
+                    </div>
+                    <div class="widget bg-primary">
+                      <div class="widget-bg-icon">
+                        <i class="fa fa-bookmark-o"></i>
+                      </div>
+                      <div class="widget-details">
+                        <span class="block h4 mt0 mb5">4,894K</span>
+                        <span>Parks and recreation</span>
+                      </div>
+                    </div>
+                    <div class="widget bg-blue">
+                      <div class="widget-bg-icon">
+                        <i class="fa fa-paint-brush"></i>
+                      </div>
+                      <div class="widget-details">
+                        <span class="block h4 mt0 mb5">32,893K</span>
+                        <span>Shops worldwide</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-3">
+                <form class="form-horizontal bordered-group ng-pristine ng-valid" role="form">
+
+
+
+
+                      <div class="mb15">
+
+                        <input type="text" class="form-control" ng-model="comment" ng-change="fil(comment)" placeholder="Поиск по ID (1-6)">
+
+
+
+                    </div>
+
+
+                </form>
+              </div>
+              <div class="col-md-12">
+<!--<a ng-click="fil()">fff</a>-->
+                <div class="shadows" style="position: relative; min-height: 600px;  background: #fff">
+                  <ig-grid id="grid"
+                           primary-key="ID"
+                           data-source="data"
+                           width="100%"
+                           auto-generate-columns="true"
+                           auto-fit-last-column="false">
+                    <columns>
+                      <column header-text="ID" key="ID" data-type="number" width="3%"  text-align="center"  hidden="true"></column>
+                      <column header-text="Image" key="Image" data-type="string" width="7%"  text-align="center" template="<img src='${Image}'>"></column>
+                      <column header-text="Product Info" key="ProductInfo" mapper="{{confi}}" width="13%"  data-type="object" value-key="ProductInfo" template="<strong>SKU</strong>: <span>${ProductInfo.SKU}</span><br/><strong>ASIN</strong>: <span>${ProductInfo.ASIN}</span><br/><strong>MFN/AFN</strong>: <span>${ProductInfo.MFNAFN}</span><br/><strong>Product Name</strong>: <span>${ProductInfo.ProductName}</span><br/><strong>Condition</strong>: <span>${ProductInfo.Condition}</span><br/><strong>FNSKU</strong>: <span>${ProductInfo.FNSKU}</span>"></column>
+                      <column header-text="Available Stock" key="AvailableStock" width="13%" data-type="object" template="<strong>Available FBA</strong>: <span>${AvailableStock.AvailableFBA}</span><br/><strong>InboundQty</strong>: <span>${AvailableStock.InboundQty}</span><br/><strong>Reserved FC</strong>: <span>${AvailableStock.ReservedFC}</span><br/><strong>Available MFN</strong>: <span>${AvailableStock.AvailableMFN}</span><br/><strong>Total Inventory</strong>: <span>${AvailableStock.TotalInventory}</span>"></column>
+                      <column header-text="Purchasing" key="Purchasing" width="13%" data-type="object" template="<strong>Last Cost</strong>: <span>${Purchasing.LastCost}</span><br/><strong>Last Average Cos</strong>: <span>${Purchasing.LastAverageCos}</span><br/><strong>Average Cost</strong>: <span>${Purchasing.AverageCost}</span><br/><strong>Inbound FBA Cost</strong>: <span>${Purchasing.InboundFBACost}</span><br/><strong>PrepCost</strong>: <span>${Purchasing.PrepCost}</span>"></column>
+                      <column header-text="Purchase History" key="PurchaseHistory" width="13%" data-type="object" template="<strong>Date</strong>: <span>${PurchaseHistory.CaseQty.Date}</span><br/><strong>Qty</strong>: <span>${PurchaseHistory.CaseQty.Qty}</span><br/><strong>Av</strong>: <span>${PurchaseHistory.CaseQty.Av}</span><br/><strong>Price</strong>: <span>${PurchaseHistory.CaseQty.Price}</span>"></column>
+                      <column header-text="Velocity" key="Velocity" width="13%" data-type="object" template="<strong>Days OOS 365</strong>: <span>${Velocity.DaysOOS365}</span><br/><strong>Velocity 7 Days</strong>: <span>${Velocity.Velocity7Days}</span><br/><strong>Velocity 30 Days</strong>: <span>${Velocity.Velocity30Days}</span><br/><strong>Velocity 90 Days</strong>: <span>${Velocity.Velocity90Days}</span><br/><strong>Velocity 365 Days</strong>: <span>${Velocity.Velocity365Days}</span>"></column>
+                      <column header-text="Profitability" key="Profitability" width="13%" data-type="object" template="<strong>Price 90</strong>: Low <span>${Profitability.Price90.Low}</span> High <span>${Profitability.Price90.High}</span> Ave <span>${Profitability.Price90.Ave}</span><br/><strong>Profits 90</strong>: Low <span>${Profitability.Profits90.Low}</span> High <span>${Profitability.Profits90.High}</span> Ave <span>${Profitability.Profits90.Ave}</span><br/><strong>Prices Now</strong>: <span>${Profitability.PricesNow}</span><br/><strong>Profits Now</strong>: <span>${Profitability.ProfitsNow}</span><br/><strong>Total New Offers</strong>: <span>${Profitability.TotalNewOffers}</span><br/><strong>FBA</strong>: <span>${Profitability.FBA}</span><br/><strong>MFN</strong>: <span>${Profitability.MFN}</span><br/><strong>Rank 30 Ave</strong>: <span>${Profitability.Rank30Ave}</span><br/><strong>Category</strong>: <span>${Profitability.Category}</span>"></column>
+                      <column header-text="Order" key="Order" data-type="object" width="13%" template="<strong>Relative Success Now</strong>: <span>${Order.RelativeSuccessNow}</span><br/><strong>Relative Success 90</strong>: <span>${Order.RelativeSuccess90}</span><br/><strong>Suggested 30</strong>: <span>${Order.Suggested30}</span><br/><strong>Suggested 90</strong>: <span>${Order.Suggested90}</span><br/><strong>Editable</strong>: <span>${Order.Editable}</span><br/><strong>Total</strong>: <span>${Order.Total}</span>"></column>
+
+                    </columns>
+                    <features>
+                      <feature>
+                        <column-settings>
+                          <column-setting  column-key="ProductInfo" allow-sorting="false"></column-setting>
+                        </column-settings>
+                      </feature>
+
+                      <feature name="Sorting" type="local" mode="multi" sorting-dialog-containment="window">
+                        <column-settings>
+                          <column-setting  column-key="ProductInfo" allow-sorting="false"></column-setting>
+                          <column-setting  column-key="AvailableStock" allow-sorting="false"></column-setting>
+                          <column-setting  column-key="Purchasing" allow-sorting="false"></column-setting>
+                          <column-setting  column-key="PurchaseHistory" allow-sorting="false"></column-setting>
+                          <column-setting  column-key="Velocity" allow-sorting="false"></column-setting>
+                          <column-setting  column-key="Profitability" allow-sorting="false"></column-setting>
+                          <column-setting  column-key="Order" allow-sorting="false"></column-setting>
+                        </column-settings>
+                      </feature>
+                      <feature name="Filtering" type="local" mode="advanced" filter-dialog-containment="window"></feature>
+                      <feature name="Hiding"></feature>
+                      <feature name="ColumnMoving" column-moving-dialog-containment="window"></feature>
+                      <feature name="Paging" page-size="10"  show-page-size-drop-down="false"></feature>
+
+                      <feature name="Selection" mode="row" multiple-selection="true"></feature>
+
+                    </features>
+                  </ig-grid>
+                </div>
+              </div>
             </div>
 
+          </div>
         </div>
-    </script>
+        <!-- /main area -->
 
-    <script id="editorsTemplate" type="text/html">
-        <tr>
-            <td style="text-align:right;color:#777;"><strong>${headerText}</strong></td>
-            <td><input data-editor-for-${key}="true" /></td>
-        </tr>
-    </script>
-</div>
+      </div>
+      <!-- /content panel -->
 
-<script src="http://www.igniteui.com/data-files/nw-employees.js"></script>
-<script>
-    $(function () {
-        var mydata = [
-            { id: "1",	 invdate: "2015-09-01", name: "test2",	note: "note2",	amount: "300.00", tax: "20.00", closed: false, ship_via: "10%", total: "[2, 4, 3, 4, 5, 4, 5, 4, 3, 4]" },
-            { id: "2",	 invdate: "2015-09-01", name: "test3",	note: "note3",	amount: "400.00", tax: "30.00", closed: false, ship_via: "50%", total: "[2, 4, 3, 4, 5, 4, 5, 4, 3, 4]" },
-            { id: "3",	 invdate: "2015-10-04", name: "test4",	note: "note4",	amount: "200.00", tax: "10.00", closed: true,  ship_via: "30%", total: "[10,8,5,7,4,4,1,8,5,7,4,4,1]" },
-            { id: "4",	 invdate: "2015-10-31", name: "test5",	note: "note5",	amount: "300.00", tax: "20.00", closed: false, ship_via: "60%", total: "[10,8,5,7,4,4,1,8,5,7,4,4,1]" },
-            { id: "5",	 invdate: "2015-09-06", name: "test6",	note: "note6",	amount: "400.00", tax: "30.00", closed: false, ship_via: "50%", total: "[10,8,5,7,4,4,1,8,5,7,4,4,1]" },
-            { id: "6",	 invdate: "2015-10-04", name: "test7",	note: "note7",	amount: "200.00", tax: "10.00", closed: true,  ship_via: "70%", total: "[10,8,5,7,4,4,1,4,4,1,10,8,5,7]" },
-            { id: "7",	 invdate: "2015-10-03", name: "test8",	note: "note8",	amount: "300.00", tax: "20.00", closed: false, ship_via: "90%", total: "[10,8,5,7,4,4,1,2, 4, 3, 4, 5]" },
-            { id: "8",	 invdate: "2015-09-01", name: "test9",	note: "note9",	amount: "400.00", tax: "30.00", closed: false, ship_via: "50%", total: "[10,8,5,7,4,4,1,4,4,1,10,8,5,7]" },
-            { id: "9", invdate: "2015-09-08", name: "test10", note: "note10", amount: "500.00", tax: "30.00", closed: true,  ship_via: "20%", total: "[10,8,5,7,4,4,1,2, 4, 3, 4, 5]" },
-            { id: "10", invdate: "2015-09-08", name: "test11", note: "note11", amount: "500.00", tax: "30.00", closed: false, ship_via: "50%", total: "[10,8,5,7,4,4,1,8,5,7,4,4,1]" },
-            { id: "11", invdate: "2015-09-10", name: "test12", note: "note12", amount: "500.00", tax: "30.00", closed: false, ship_via: "80%", total: "[10,8,5,7,4,4,1,2, 4, 3, 4, 5]" },
-            { id: "12",	 invdate: "2015-09-01", name: "test2",	note: "note2",	amount: "300.00", tax: "20.00", closed: false, ship_via: "100%", total: "[2, 4, 3, 4, 5, 4, 5, 4, 3, 4]" },
-            { id: "13",	 invdate: "2015-10-04", name: "test4",	note: "note4",	amount: "200.00", tax: "10.00", closed: true,  ship_via: "15%", total: "[10,8,5,7,4,4,1,2, 4, 3, 4, 5]" },
-            { id: "14",	 invdate: "2015-10-31", name: "test5",	note: "note5",	amount: "300.00", tax: "20.00", closed: false, ship_via: "20%", total: "[10,8,5,7,4,4,1,10,8,5,7,4,4,1]" },
-            { id: "15",	 invdate: "2015-09-06", name: "test6",	note: "note6",	amount: "400.00", tax: "30.00", closed: false, ship_via: "10%", total: "[10,8,5,7,4,4,1,4,4,1,10,8,5,7]" },
-            { id: "16",	 invdate: "2015-10-04", name: "test7",	note: "note7",	amount: "200.00", tax: "10.00", closed: true,  ship_via: "5%", total: "[10,8,5,7,4,4,1,2, 4, 3, 4, 5]" },
-            { id: "17",	 invdate: "2015-10-03", name: "test8",	note: "note8",	amount: "300.00", tax: "20.00", closed: false, ship_via: "90%", total: "[10,8,5,7,4,4,1,4,4,1,10,8,5,7]" },
-            { id: "18",	 invdate: "2015-09-01", name: "test9",	note: "note9",	amount: "400.00", tax: "30.00", closed: false, ship_via: "75%", total: "[10,8,5,7,4,4,1]" },
-            { id: "19", invdate: "2015-09-08", name: "test10", note: "note10", amount: "500.00", tax: "30.00", closed: true,  ship_via: "25%", total: "[10,8,5,7,4,4,1,2, 4, 3, 4, 5]" },
-            { id: "20", invdate: "2015-09-08", name: "test11", note: "note11", amount: "500.00", tax: "30.00", closed: false, ship_via: "18%", total: "[10,8,5,7,4,4,1,4,4,1,10,8,5,7]" },
-            { id: "21", invdate: "2015-09-10", name: "test12", note: "note12", amount: "500.00", tax: "30.00", closed: false, ship_via: "89%", total: "[10,8,5,7,4,4,1]" }
-        ];
-        function progressFn() {
-            $('.skillbar').each(function(){
-                $(this).find('.skillbar-bar').animate({
-                    width:$(this).attr('data-percent')
-                },800);
-            });
-        }
-        $("#grid").igGrid({
-            dataSource: mydata,
-            primaryKey: "id",
-            width: "100%",
-            height: "600px",
-            autoCommit: true,
-            autofitLastColumn: false,
-            autoGenerateColumns: false,
-            columns: [
-                { key: "id",     headerText: "ID",  dataType: "number"},
-                { key: "name",   headerText: "Name",  dataType: "string" },
-                { key: "note",   headerText: "Note",  dataType: "string" },
-                { key: "amount", headerText: "Amount",  dataType: "number" },
-                { key: "total",  headerText: "Total",  template: "<div data-id='${id}' class='order-total'>${total}</div>" },
-                { key: "ship_via",  headerText: "Progress",  template: "<div class='skillbar clearfix' data-percent='${ship_via}'><div class='skillbar-bar' style='background: #2ecc71;'></div><div class='skill-bar-percent'>${ship_via}</div></div>" }
-            ],
+      <!-- bottom footer -->
+      <footer class="content-footer" ng-include="'views/common/footer.html'"></footer>
+      <!-- /bottom footer -->
+    </div>
 
-            features: [
-                {
-                    name: "Sorting",
-                    type: "local",
+    <script src="scripts/lib/modernizr-2.8.3.js"></script>
+    <script src="scripts/lib/jquery-1.9.1.min.js"></script>
+    <script src="vendor/jquery-ui/jquery-ui.min.js"></script>
+    <script src="vendor/angular/angular.js"></script>
+    <script src="vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="vendor/angular-animate/angular-animate.js"></script>
+    <script src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="vendor/angular-sanitize/angular-sanitize.js"></script>
+    <script src="vendor/angular-touch/angular-touch.js"></script>
 
-                    persist: true
-                },
-                {
-                    name: "Filtering",
-                    type: "local",
-                    persist: true
-                },
+    <script src="vendor/highcharts/highstock.js"></script>
+    <script src="vendor/highcharts/js/modules/exporting.js"></script>
 
-                {
-                    name: "Selection",
-                    mode: 'row',
-                    multipleSelection: true,
-                    persist: true
-                },
+    <script src="vendor/igniteui/infragistics.js"></script>
+    <!--<script src="vendor/grid/infragistics.core.js"></script>-->
+    <!--<script src="vendor/grid/infragistics.dv.js"></script>-->
+    <!--<script src="vendor/grid/infragistics.lob.js"></script>-->
 
-                {
-                    name: "Paging",
-                    type: "local",
-                    pageSize: 10
-                },
+    <script src="vendor/igniteui-angular/src/igniteui-angular.js"></script>
 
-                {
-                    name: "Updating",
+    <script src="http://www.igniteui.com/data-files/northwindProducts.js"></script>
+    <!--<script src="http://www.igniteui.com/data-files/northwind.js"></script>-->
 
-                    editMode: "dialog",
-                    addRowLabel: "ADD NEW COLUMNS",
-                    columnSettings: [
-                        {
-                            columnKey: "id",
-                            readOnly: true
-                        }
-                    ],
-                    rowEditDialogOptions: {
-                        width: "530px",
-                        height: "530px",
-                        dialogTemplateSelector: "#dialogTemplate",
-                        editorsTemplateSelector: "#editorsTemplate",
-                        showReadonlyEditors: false,
-                    },
-                    editRowEnded: function (evt, ui) {
-//                        var dataSource = ui.owner.dataSource;
-                        progressFn()
-                        $(".order-total").each(function(i) {
-                            var ar;
-                            try {
-                                console.log($(this))
-                                ar = $.parseJSON($(this).text());
-                                if (ar && ar.length>0) {
-                                    $(this).sparkline(ar, {
-                                        type: 'bar',
-                                        colorMap: {
-                                            '7': '#a1a1a1'
-                                        },
-                                        barColor: '#26B99A'
-                                    });
-                                }
-                            } catch(e) {}
-                        });
-                    }
+    <script src="scripts/app.js"></script>
+    <script src="scripts/app.main.js"></script>
+    <script src="scripts/config.router.js"></script>
 
-                }
-            ],
-            rowsRendered: function (evt, ui) {
-                //get data collection
-//                var dataSource = ui.owner.dataSource;
-                progressFn();
+    <script src="scripts/controllers/dashboard.js"></script>
+    <!-- endbuild -->
+  <script>
+    $(document).ready(function () {
+      $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function(data) {
+        // Create the chart
+        window.chart = new Highcharts.StockChart({
+          chart: {
+            renderTo: 'container'
+          },
 
+          rangeSelector: {
+            selected: 1,
+            inputDateFormat: '%Y-%m-%d'
+          },
 
-                $(".order-total").each(function(i) {
-                    var ar;
-                    try {
+          title: {
+            text: 'AAPL Stock Price'
+          },
 
-                        ar = $.parseJSON($(this).text());
-                        if (ar && ar.length>0) {
+          series: [{
+            name: 'AAPL',
+            data: data,
+            tooltip: {
+              valueDecimals: 2
+            }}]
 
-                            $(this).sparkline(ar, {
-                                type: 'bar',
-                                colorMap: {
-                                    '7': '#a1a1a1'
-                                },
-                                barColor: '#26B99A'
-                            });
-                        }
-                    } catch(e) {}
-                });
-            },
+        }, function(chart) {
 
+          // apply the date pickers
+          setTimeout(function() {
+            $('input.highcharts-range-selector', $('#' + chart.options.chart.renderTo)).datepicker()
+          }, 0)
         });
-    });
+      });
 
 
+      // Set the datepicker's date format
+      $.datepicker.setDefaults({
+        dateFormat: 'yy-mm-dd',
+        onSelect: function(dateText) {
+          this.onchange();
+          this.onblur();
+        }
+      });
+    })
 
-</script>
-<style>
-
-</style>
+  </script>
 </body>
 </html>
