@@ -270,10 +270,14 @@
     <script src="scripts/config.router.js"></script>
 
     <script src="scripts/controllers/dashboard.js"></script>
+
+
+
+    <script src="data/jsonp.js"></script>
     <!-- endbuild -->
   <script>
     $(document).ready(function () {
-      $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function(data) {
+
         // Create the chart
         window.chart = new Highcharts.StockChart({
           chart: {
@@ -291,7 +295,7 @@
 
           series: [{
             name: 'AAPL',
-            data: data,
+            data: sss.data,
             tooltip: {
               valueDecimals: 2
             }}]
@@ -303,7 +307,7 @@
             $('input.highcharts-range-selector', $('#' + chart.options.chart.renderTo)).datepicker()
           }, 0)
         });
-      });
+
 
 
       // Set the datepicker's date format
