@@ -273,7 +273,7 @@
     <!-- endbuild -->
   <script>
     $(document).ready(function () {
-      $.getJSON('data/jsonp.json', function(data) {
+      $.getJSON('data/jsonp.json?v=1', function(data) {
         // Create the chart
         window.chart = new Highcharts.StockChart({
           chart: {
